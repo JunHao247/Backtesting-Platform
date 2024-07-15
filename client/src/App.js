@@ -6,7 +6,6 @@ import ResultsDisplay from './components/ResultsDisplay';
 const App = () => {
   const [results, setResults] = useState(null);
 
-  console.log('Results in App:', results); // Check `results` in console
 
   return (
     <div className="App">
