@@ -12,8 +12,8 @@ const App = () => {
         <h1>Crypto Backtesting Platform</h1>
         <nav>
           <a href="#home">Backtest</a>
-          <a href="#backtest">Database Schema</a>
-          <a href="#about">Documentation</a>
+          <a href="#database">Database Schema</a>
+          <a href="#documentation">Documentation</a>
         </nav>
       </header>
       <main>
