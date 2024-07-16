@@ -6,10 +6,8 @@ import ResultsDisplay from './components/ResultsDisplay';
 const App = () => {
   const [results, setResults] = useState(null);
 
-
   return (
     <div className="App">
-      <h1>Crypto Backtesting Platform</h1>
       <BacktestForm onResults={setResults} />
       <ResultsDisplay results={results} />
     </div>

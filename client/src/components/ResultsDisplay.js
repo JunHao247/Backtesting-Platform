@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -22,30 +23,17 @@ ChartJS.register(
 );
 
 const ResultsDisplay = ({ results }) => {
-  // Case 1: No `results` prop provided or `results` is null or undefined
-  if (results === null || results === undefined) {
-    return ;
-  }
-
-  // Case 2: `results` is an empty array
-  if (results.length === 0) {
-    return <div>No results to display</div>;
-  }
-
-  // Case 3: `results` is not an array (unexpected data type)
-  if (!Array.isArray(results)) {
-    console.error('Invalid data format: `results` should be an array');
-    return <div>Error: Invalid data format</div>;
-  }
-
   // Function to format timestamp to month-day format
   const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    return `${date.toLocaleString('default', { month: 'short' })} ${date.getDate()}`;
+    return moment(timestamp).format('MMM DD, YYYY');
   };
 
+  // Check if short_mavg and long_mavg are present
+  const hasShortMavg = results && results.some(result => 'short_mavg' in result);
+  const hasLongMavg = results && results.some(result => 'long_mavg' in result);
+
   // Prepare data for the price and moving averages chart
-  const priceChartData = {
+  const priceChartData = results ? {
     labels: results.map(result => formatDate(result.timestamp)),
     datasets: [
       {
@@ -55,20 +43,20 @@ const ResultsDisplay = ({ results }) => {
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: false,
       },
-      {
+      ...(hasShortMavg ? [{
         label: 'Short Moving Average',
         data: results.map(result => result.short_mavg),
         borderColor: 'rgba(255, 99, 132, 1)',
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         fill: false,
-      },
-      {
+      }] : []),
+      ...(hasLongMavg ? [{
         label: 'Long Moving Average',
         data: results.map(result => result.long_mavg),
         borderColor: 'rgba(54, 162, 235, 1)',
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
         fill: false,
-      },
+      }] : []),
       {
         label: 'Buy Signal',
         data: results.map(result => (result.positions === 1 ? result.close : null)),
@@ -90,10 +78,10 @@ const ResultsDisplay = ({ results }) => {
         pointStyle: 'rectRot',
       },
     ],
-  };
+  } : null;
 
   // Prepare data for the portfolio value chart
-  const portfolioChartData = {
+  const portfolioChartData = results ? {
     labels: results.map(result => formatDate(result.timestamp)),
     datasets: [
       {
@@ -104,7 +92,11 @@ const ResultsDisplay = ({ results }) => {
         fill: false,
       },
     ],
-  };
+  } : null;
+
+  if (!results || results.length === 0) {
+    return null;
+  }
 
   return (
     <div>
@@ -123,6 +115,8 @@ const ResultsDisplay = ({ results }) => {
             <th>Low</th>
             <th>Close</th>
             <th>Volume</th>
+            {hasShortMavg && <th>Short MAvg</th>}
+            {hasLongMavg && <th>Long MAvg</th>}
             <th>Signal</th>
             <th>Positions</th>
             <th>Portfolio Value</th>
@@ -137,6 +131,8 @@ const ResultsDisplay = ({ results }) => {
               <td>{result.low}</td>
               <td>{result.close}</td>
               <td>{result.volume}</td>
+              {hasShortMavg && <td>{result.short_mavg}</td>}
+              {hasLongMavg && <td>{result.long_mavg}</td>}
               <td>{result.signal}</td>
               <td>{result.positions}</td>
               <td>{result.portfolio_value}</td>

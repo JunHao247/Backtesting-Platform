@@ -40,7 +40,10 @@ if __name__ == "__main__":
         input_data = json.loads(sys.stdin.read())
         data = pd.DataFrame(input_data['data'])
         strategy_code = input_data['strategy']
-        initial_cash = 10000  # Set initial cash
+        initial_cash = float(input_data.get('initialCash'))  # Use get method to avoid key error
+
+        if initial_cash is None:
+            raise ValueError('initialCash not found in input data')
 
         try:
             result = run_user_strategy(data, strategy_code)

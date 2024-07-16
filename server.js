@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/backtest', async (req, res) => {
-  const { symbol, startDate, endDate, strategy } = req.body;
+  const { symbol, startDate, endDate, strategy, initialCash } = req.body;
   try {
     const data = await getHistoricalKlines(symbol, '1d', startDate, endDate);
     console.log('Historical data fetched:', data.length, 'records');
@@ -48,7 +48,7 @@ app.post('/api/backtest', async (req, res) => {
     const pythonProcess = spawn('python', ['execute_strategy.py']);
 
     // Write data to stdin of python process
-    pythonProcess.stdin.write(JSON.stringify({ data, strategy }));
+    pythonProcess.stdin.write(JSON.stringify({ data, strategy, initialCash }));
     pythonProcess.stdin.end();
 
     let result = '';
