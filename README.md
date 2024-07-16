@@ -1,8 +1,19 @@
 This project aims to assist researchers in backtesting their custom trading strategies with cryptocurrency data derived from Binance.
 
+## Set Up
+
+Step 1: 
+In the project directory, you can run the below to start the server:
+
+`node server.js` 
+
+Step 2:
 In the project directory `client`, you can run:
 
 `npm start`
+
+By following these 2 steps, the application should be running locally.
+
 
 ## Troubleshooting
 
