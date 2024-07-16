@@ -59,7 +59,7 @@ const BacktestForm = ({ onResults }) => {
         <div className="leftContainer">
           <label>
             Cryptocurrency Ticker:
-            <TickerSelector onTickerChange={setSymbol} />
+            <TickerSelector value={symbol} onTickerChange={setSymbol} />
           </label>
           <label>
             Date Range:

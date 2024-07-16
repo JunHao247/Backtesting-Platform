@@ -1,11 +1,21 @@
 import React from 'react';
 
-const TickerSelector = ({ onTickerChange }) => (
-  <select onChange={(e) => onTickerChange(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}>
-    <option value="BTCUSDT">BTCUSDT</option>
-    <option value="ETHUSDT">ETHUSDT</option>
-    {/* Add more options as needed */}
-  </select>
-);
+const TickerSelector = ({ value, onTickerChange }) => {
+  return (
+    <input
+      type="text"
+      value={value}
+      onChange={(e) => onTickerChange(e.target.value.toUpperCase())}
+      placeholder="Enter cryptocurrency ticker"
+      style={{
+        padding: '10px',
+        borderRadius: '4px',
+        border: '1px solid #444',
+        backgroundColor: '#3a3a3a',
+        color: '#e0e0e0',
+      }}
+    />
+  );
+};
 
 export default TickerSelector;
