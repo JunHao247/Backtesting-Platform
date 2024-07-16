@@ -1,12 +1,41 @@
 This project aims to assist researchers in backtesting their custom trading strategies with cryptocurrency data derived from Binance.
 
+## Set Up
+
+Step 1: 
+In the project directory, you can run the below to start the server:
+
+`node server.js` 
+
+Step 2:
 In the project directory `client`, you can run:
 
 `npm start`
 
-Runs the app in the development mode.
-Open http://localhost:3000 to view it in your browser.
+By following these 2 steps, the application should be running locally.
 
-The page will reload when you make changes.
-You may also see any lint errors in the console.
 
+## Troubleshooting
+
+### macOS Security Warning for fsevents.node
+
+If you encounter a security warning about `fsevents.node` when running the application on macOS, you can resolve it by running the following commands in your terminal:
+
+1. **Navigate to your project directory**:
+
+    ```bash
+    cd /path/to/your/project
+    ```
+
+2. **Remove `node_modules` and reinstall packages**:
+
+    ```bash
+    rm -rf node_modules
+    npm install
+    ```
+
+
+Alternatively, you can clone the repository directly from GitHub to avoid this issue:
+
+```bash
+git clone https://github.com/your-username/your-repository-name.git
