@@ -75,6 +75,7 @@ form {
 
 .strategy {
   max-width: 830px;
+  width: 800px!important;
 }
 
 label {
