@@ -1,7 +1,7 @@
 import React from 'react';
 
 const StrategyEditor = ({ onStrategyChange, presetStrategy }) => (
-  <textarea 
+  <textarea class="strategy"
     onChange={(e) => onStrategyChange(e.target.value)} 
     placeholder="Enter your strategy here" 
     rows="20" 
