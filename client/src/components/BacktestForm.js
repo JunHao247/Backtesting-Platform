@@ -4,7 +4,8 @@ import TickerSelector from './TickerSelector';
 import DateRangePicker from './DateRangePicker';
 import StrategyEditor from './StrategyEditor';
 
-const defaultStrategy = `
+const defaultStrategies = {
+  'Moving Average Crossover': `
 def strategy(data):
     short_window = 5
     long_window = 20
@@ -14,15 +15,44 @@ def strategy(data):
     data.loc[short_window:, 'signal'] = np.where(data.loc[short_window:, 'short_mavg'] > data.loc[short_window:, 'long_mavg'], 1, 0)
     data['positions'] = data['signal'].diff()
     return data
-`;
+  `,
+  'Momentum Strategy': `
+def strategy(data, window=20):
+    data = data.copy()  # Make a copy of the DataFrame
+    data['momentum'] = data['close'].diff(window)
+    data['signal'] = 0
+    data.loc[window:, 'signal'] = np.where(data['momentum'][window:] > 0, 1, 0)
+    data['positions'] = data['signal'].diff()
+    return data
+    
+  `,
+  'Breakout Strategy': `
+def strategy(data, window=20):
+    data = data.copy()  # Make a copy of the DataFrame
+    data['rolling_max'] = data['high'].rolling(window=window).max()
+    data['rolling_min'] = data['low'].rolling(window=window).min()
+    data['signal'] = 0
+    data['signal'] = np.where(data['close'] > data['rolling_max'].shift(1), 1, data['signal'])
+    data['signal'] = np.where(data['close'] < data['rolling_min'].shift(1), -1, data['signal'])
+    data['positions'] = data['signal'].diff()
+    return data
+  `,
+};
 
 const BacktestForm = ({ onResults }) => {
   const [symbol, setSymbol] = useState('BTCUSDT');
   const [startDate, setStartDate] = useState('2023-01-01');
   const [endDate, setEndDate] = useState('2024-01-01');
   const [initialCash, setInitialCash] = useState(10000);
-  const [strategy, setStrategy] = useState(defaultStrategy);
+  const [selectedStrategy, setSelectedStrategy] = useState(Object.keys(defaultStrategies)[0]);
+  const [strategy, setStrategy] = useState(defaultStrategies[selectedStrategy]);
   const [error, setError] = useState(null);
+
+  const handleStrategyChange = (e) => {
+    const newStrategy = e.target.value;
+    setSelectedStrategy(newStrategy);
+    setStrategy(defaultStrategies[newStrategy]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,11 +99,21 @@ const BacktestForm = ({ onResults }) => {
             Initial Cash:
             <input type="number" value={initialCash} onChange={(e) => setInitialCash(parseFloat(e.target.value))} />
           </label>
+          <label>
+            Strategy:
+            <select value={selectedStrategy} onChange={handleStrategyChange}>
+              {Object.keys(defaultStrategies).map((strat) => (
+                <option key={strat} value={strat}>
+                  {strat}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
         <div className="rightContainer">
           <label>
             Python Code:
-            <StrategyEditor onStrategyChange={setStrategy} presetStrategy={defaultStrategy} />
+            <StrategyEditor onStrategyChange={setStrategy} presetStrategy={strategy} />
           </label>
           <button type="submit">Run Backtest</button>
         </div>

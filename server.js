@@ -1,10 +1,10 @@
 require('dotenv').config();
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { spawn } = require('child_process');
 const Binance = require('binance-api-node').default;
+const path = require('path');
 
 const app = express();
 const port = 3000;
@@ -35,7 +35,7 @@ const getHistoricalKlines = async (symbol, interval, start, end) => {
   }));
 };
 
-app.get('/', (req, res) => {
+app.get('/api/test', (req, res) => {
   res.send('Hello World!');
 });
 
@@ -84,6 +84,14 @@ app.post('/api/backtest', async (req, res) => {
     console.error('Error running backtest:', error);
     res.status(500).send('Internal Server Error');
   }
+});
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'build')));
+
+// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/build/index.html'));
 });
 
 app.listen(port, () => {
