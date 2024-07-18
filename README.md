@@ -4,8 +4,11 @@ This project aims to assist researchers in backtesting their custom trading stra
 
 Step 1: 
 Create an `.env` file in the project directory,
+
 Input 2 parameters:
+
 BINANCE_API_KEY = (Your own BINANCE API KEY)
+
 BINANCE_API_SECRET = (Your own BINANCE API SECRET)
 
 Step 2: 
