@@ -2,9 +2,8 @@ import sys
 import json
 import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
 import joblib
+import os
 
 def run_user_strategy(data, strategy_code):
     env = {'pd': pd, 'np': np}
@@ -30,19 +29,27 @@ def calculate_portfolio_value(data, initial_cash):
     data.loc[:, 'portfolio_value'] = portfolio_values
     return data
 
-def apply_ai_strategy(data):
-    rf_model = joblib.load('rf_training_model.pkl')
-    svm_model = joblib.load('svm_training_model.pkl')
+def apply_ai_strategy(data, symbol):
+    model_dir = 'models'
+    rf_model_path = f'{model_dir}/rf_model_{symbol}.pkl'
+    svm_model_path = f'{model_dir}/svm_model_{symbol}.pkl'
+
+    if not os.path.exists(rf_model_path) or not os.path.exists(svm_model_path):
+        raise ValueError(f"Model files for {symbol} do not exist")
+
+    rf_model = joblib.load(rf_model_path)
+    svm_model = joblib.load(svm_model_path)
+
     data['momentum'] = data['close'].diff(20)
     data = data.dropna().copy()
-    
+
     if data.shape[0] == 0:
         raise ValueError("Insufficient data after processing for AI strategy.")
-    
+
     X = data[['close', 'momentum']]
     rf_predictions = rf_model.predict(X)
     svm_predictions = svm_model.predict(X)
-    
+
     # Combine predictions (here simply averaging, but you can use other methods)
     combined_predictions = (rf_predictions + svm_predictions) / 2
     data.loc[:, 'signal'] = np.where(combined_predictions > 0.5, 1, 0)
@@ -55,12 +62,13 @@ if __name__ == "__main__":
         data = pd.DataFrame(input_data['data'])
         strategy_code = input_data['strategy']
         initial_cash = float(input_data.get('initialCash'))
+        symbol = input_data['symbol']
 
         if strategy_code == 'ai':
-            result = apply_ai_strategy(data)
+            result = apply_ai_strategy(data, symbol)
         else:
             result = run_user_strategy(data, strategy_code)
-        
+
         result = calculate_portfolio_value(result, initial_cash)
         result = result.replace({np.nan: None})
         result_dict = result.to_dict(orient='records')

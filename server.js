@@ -49,7 +49,7 @@ app.post('/api/backtest', async (req, res) => {
     const pythonProcess = spawn('python', ['execute_strategy.py']);
 
     // Write data to stdin of python process
-    pythonProcess.stdin.write(JSON.stringify({ data, strategy, initialCash }));
+    pythonProcess.stdin.write(JSON.stringify({ data, strategy, initialCash, symbol }));
     pythonProcess.stdin.end();
 
     let result = '';
