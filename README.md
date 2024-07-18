@@ -3,22 +3,23 @@ This project aims to assist researchers in backtesting their custom trading stra
 ## Set Up
 
 Step 1: 
-In the project directory, you can run the below to start the server:
-
-`node server.js` 
-
-Step 2:
-In the project directory `client`, you can run:
-
-`npm start`
-
-Step 3: 
 Create an `.env` file in the project directory,
 Input 2 parameters:
 BINANCE_API_KEY = (Your own BINANCE API KEY)
 BINANCE_API_SECRET = (Your own BINANCE API SECRET)
 
-By following these 2 steps, the application should be running locally.
+Step 2: 
+In the project directory, you can run the below to start the server:
+
+`node server.js` 
+
+Step 3:
+In the project directory `client`, you can run:
+
+`npm start`
+
+
+By following these 3 steps, the application should be running locally.
 
 
 ## Troubleshooting
