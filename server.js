@@ -5,6 +5,7 @@ const cors = require('cors');
 const { spawn } = require('child_process');
 const Binance = require('binance-api-node').default;
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const port = 3000;
@@ -70,7 +71,6 @@ app.post('/api/backtest', async (req, res) => {
       try {
         if (error) {
           console.error('Error from Python script:', error);
-          return res.status(500).send(error);
         }
         console.log('Result:', result);
         const parsedResult = JSON.parse(result);
@@ -96,4 +96,46 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
+});
+
+const getHistoricalData = async () => {
+  const data = await getHistoricalKlines('BTCUSDT', '1d', '2017-01-01', '2024-01-01');
+  const csv = data.map(d => `${d.timestamp},${d.open},${d.high},${d.low},${d.close},${d.volume}`).join('\n');
+  fs.writeFileSync('historical_data.csv', 'timestamp,open,high,low,close,volume\n' + csv);
+  console.log('Historical data saved to historical_data.csv');
+};
+
+app.get('/api/generate-historical-data', async (req, res) => {
+  try {
+    await getHistoricalData();
+    res.send('Historical data generated and saved to historical_data.csv');
+  } catch (error) {
+    console.error('Error generating historical data:', error);
+    res.status(500).send('Error generating historical data');
+  }
+});
+
+// Add this endpoint to your server.js
+app.get('/api/update-model', async (req, res) => {
+  try {
+    const pythonProcess = spawn('python', ['training_model.py']);
+    
+    pythonProcess.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+    });
+    
+    pythonProcess.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+    });
+    
+    pythonProcess.on('close', (code) => {
+      if (code !== 0) {
+        return res.status(500).send('Error updating model');
+      }
+      res.send('Model updated successfully');
+    });
+  } catch (error) {
+    console.error('Error updating model:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });

@@ -24,7 +24,6 @@ def strategy(data, window=20):
     data.loc[window:, 'signal'] = np.where(data['momentum'][window:] > 0, 1, 0)
     data['positions'] = data['signal'].diff()
     return data
-    
   `,
   'Breakout Strategy': `
 def strategy(data, window=20):
@@ -37,6 +36,7 @@ def strategy(data, window=20):
     data['positions'] = data['signal'].diff()
     return data
   `,
+  'AI-Based Strategy': 'ai',
 };
 
 const BacktestForm = ({ onResults }) => {
@@ -60,6 +60,16 @@ const BacktestForm = ({ onResults }) => {
 
     if (new Date(startDate) > new Date(endDate)) {
       setError('Start date cannot be greater than end date');
+      return;
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (selectedStrategy === 'AI-Based Strategy' && diffDays < 30) {
+      setError('AI-Based Strategy requires at least 30 days of data');
       return;
     }
 

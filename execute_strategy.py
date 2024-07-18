@@ -2,13 +2,12 @@ import sys
 import json
 import pandas as pd
 import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+import joblib
 
 def run_user_strategy(data, strategy_code):
-    # Define a safe execution environment
-    env = {
-        'pd': pd,
-        'np': np,
-    }
+    env = {'pd': pd, 'np': np}
     exec(strategy_code, env)
     strategy = env['strategy']
     return strategy(data)
@@ -16,23 +15,38 @@ def run_user_strategy(data, strategy_code):
 def calculate_portfolio_value(data, initial_cash):
     cash = initial_cash
     holdings = 0
-    portfolio_value = initial_cash
     portfolio_values = []
-
     for index, row in data.iterrows():
-        if row['positions'] == 1:  # Buy signal
+        if row['positions'] == 1:
             if cash > 0:
                 holdings = cash / row['close']
                 cash = 0
-        elif row['positions'] == -1:  # Sell signal
+        elif row['positions'] == -1:
             if holdings > 0:
                 cash = holdings * row['close']
                 holdings = 0
         portfolio_value = cash + holdings * row['close']
         portfolio_values.append(portfolio_value)
+    data.loc[:, 'portfolio_value'] = portfolio_values
+    return data
 
-    data['portfolio_value'] = portfolio_values
-
+def apply_ai_strategy(data):
+    rf_model = joblib.load('rf_training_model.pkl')
+    svm_model = joblib.load('svm_training_model.pkl')
+    data['momentum'] = data['close'].diff(20)
+    data = data.dropna().copy()
+    
+    if data.shape[0] == 0:
+        raise ValueError("Insufficient data after processing for AI strategy.")
+    
+    X = data[['close', 'momentum']]
+    rf_predictions = rf_model.predict(X)
+    svm_predictions = svm_model.predict(X)
+    
+    # Combine predictions (here simply averaging, but you can use other methods)
+    combined_predictions = (rf_predictions + svm_predictions) / 2
+    data.loc[:, 'signal'] = np.where(combined_predictions > 0.5, 1, 0)
+    data.loc[:, 'positions'] = data['signal'].diff()
     return data
 
 if __name__ == "__main__":
@@ -40,31 +54,22 @@ if __name__ == "__main__":
         input_data = json.loads(sys.stdin.read())
         data = pd.DataFrame(input_data['data'])
         strategy_code = input_data['strategy']
-        initial_cash = float(input_data.get('initialCash'))  # Use get method to avoid key error
+        initial_cash = float(input_data.get('initialCash'))
 
-        if initial_cash is None:
-            raise ValueError('initialCash not found in input data')
-
-        try:
+        if strategy_code == 'ai':
+            result = apply_ai_strategy(data)
+        else:
             result = run_user_strategy(data, strategy_code)
-            result = calculate_portfolio_value(result, initial_cash)
-            
-            # Clean up the result
-            result = result.replace({np.nan: None})  # Replace NaN with None
-            result_dict = result.to_dict(orient='records')
-            
-            for row in result_dict:
-                if isinstance(row['timestamp'], pd.Timestamp):
-                    row['timestamp'] = row['timestamp'].isoformat()
-            
-            # Ensure only the result JSON is printed to stdout
-            output = json.dumps(result_dict)
-            print(output)
-        except Exception as e:
-            error_message = f"Error: {str(e)}"
-            print(json.dumps({"error": error_message}), file=sys.stderr)
-            sys.exit(1)
+        
+        result = calculate_portfolio_value(result, initial_cash)
+        result = result.replace({np.nan: None})
+        result_dict = result.to_dict(orient='records')
+        for row in result_dict:
+            if isinstance(row['timestamp'], pd.Timestamp):
+                row['timestamp'] = row['timestamp'].isoformat()
+        output = json.dumps(result_dict)
+        print(output)
     except Exception as e:
-        error_message = f"Error loading input data: {str(e)}"
+        error_message = f"Error: {str(e)}"
         print(json.dumps({"error": error_message}), file=sys.stderr)
         sys.exit(1)
