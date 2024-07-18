@@ -56,9 +56,7 @@ main {
 /* Form styling */
 form {
   background-color: #2c2c2c;
-  padding: 20px;
   border-radius: 8px;
-  max-width: 95%;
   width: 100%;
   margin-bottom: 20px;
   display: flex; /* Make form a flex container */
@@ -85,7 +83,7 @@ form {
 
 .strategy {
   width: 100%;
-  height: 100%;
+  height: 200px;
   resize: vertical;
   padding: 10px;
   border-radius: 4px;
@@ -118,6 +116,7 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-left:20px;
 }
 
 button:hover {
