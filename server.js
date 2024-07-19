@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -48,7 +48,6 @@ app.post('/api/backtest', async (req, res) => {
 
     const pythonProcess = spawn('python', ['execute_strategy.py']);
 
-    // Write data to stdin of python process
     pythonProcess.stdin.write(JSON.stringify({ data, strategy, initialCash, symbol }));
     pythonProcess.stdin.end();
 
@@ -86,12 +85,10 @@ app.post('/api/backtest', async (req, res) => {
   }
 });
 
-// Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'build')));
 
-// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/build/index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 app.listen(port, () => {
@@ -115,7 +112,6 @@ app.get('/api/generate-historical-data', async (req, res) => {
   }
 });
 
-// Add this endpoint to your server.js
 app.get('/api/update-model', async (req, res) => {
   try {
     const pythonProcess = spawn('python', ['training_model.py']);
