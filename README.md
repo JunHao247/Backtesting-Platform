@@ -17,7 +17,7 @@ In the project directory, you can run the below to start the server:
 `node server.js` 
 
 Step 3:
-In the project directory `client`, you can run:
+In the project directory , you can run:
 
 `npm start`
 
