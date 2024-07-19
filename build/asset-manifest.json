@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/crypto-backtesting/static/css/main.e4a94c07.css",
-    "main.js": "/crypto-backtesting/static/js/main.1445e9c5.js",
-    "static/js/488.227ba61c.chunk.js": "/crypto-backtesting/static/js/488.227ba61c.chunk.js",
-    "index.html": "/crypto-backtesting/index.html",
-    "main.e4a94c07.css.map": "/crypto-backtesting/static/css/main.e4a94c07.css.map",
-    "main.1445e9c5.js.map": "/crypto-backtesting/static/js/main.1445e9c5.js.map",
-    "488.227ba61c.chunk.js.map": "/crypto-backtesting/static/js/488.227ba61c.chunk.js.map"
+    "main.css": "/backtesting-platform/static/css/main.e4a94c07.css",
+    "main.js": "/backtesting-platform/static/js/main.20cb5213.js",
+    "static/js/488.227ba61c.chunk.js": "/backtesting-platform/static/js/488.227ba61c.chunk.js",
+    "index.html": "/backtesting-platform/index.html",
+    "main.e4a94c07.css.map": "/backtesting-platform/static/css/main.e4a94c07.css.map",
+    "main.20cb5213.js.map": "/backtesting-platform/static/js/main.20cb5213.js.map",
+    "488.227ba61c.chunk.js.map": "/backtesting-platform/static/js/488.227ba61c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e4a94c07.css",
-    "static/js/main.1445e9c5.js"
+    "static/js/main.20cb5213.js"
   ]
 }
