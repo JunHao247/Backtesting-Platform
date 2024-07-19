@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/backtesting-platform/static/css/main.e4a94c07.css",
-    "main.js": "/backtesting-platform/static/js/main.20cb5213.js",
-    "static/js/488.227ba61c.chunk.js": "/backtesting-platform/static/js/488.227ba61c.chunk.js",
-    "index.html": "/backtesting-platform/index.html",
-    "main.e4a94c07.css.map": "/backtesting-platform/static/css/main.e4a94c07.css.map",
-    "main.20cb5213.js.map": "/backtesting-platform/static/js/main.20cb5213.js.map",
-    "488.227ba61c.chunk.js.map": "/backtesting-platform/static/js/488.227ba61c.chunk.js.map"
+    "main.css": "/Backtesting-Platform/static/css/main.e4a94c07.css",
+    "main.js": "/Backtesting-Platform/static/js/main.9cc66300.js",
+    "static/js/488.227ba61c.chunk.js": "/Backtesting-Platform/static/js/488.227ba61c.chunk.js",
+    "index.html": "/Backtesting-Platform/index.html",
+    "main.e4a94c07.css.map": "/Backtesting-Platform/static/css/main.e4a94c07.css.map",
+    "main.9cc66300.js.map": "/Backtesting-Platform/static/js/main.9cc66300.js.map",
+    "488.227ba61c.chunk.js.map": "/Backtesting-Platform/static/js/488.227ba61c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e4a94c07.css",
-    "static/js/main.20cb5213.js"
+    "static/js/main.9cc66300.js"
   ]
 }
