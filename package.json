@@ -26,9 +26,12 @@
     "lightweight-charts": "^4.1.7",
     "moment": "^2.30.1",
     "react-chartjs-2": "^5.2.0",
-    "react-scripts": "^5.0.1"
+    "react-dom": "^18.3.1",
+    "react-scripts": "^5.0.1",
+    "web-vitals": "^4.2.2"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "webpack-dev-server": "^5.0.4"
   }
 }
