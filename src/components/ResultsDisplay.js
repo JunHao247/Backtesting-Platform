@@ -101,6 +101,15 @@ const ResultsDisplay = ({ results }) => {
        fill: false,
        pointRadius: 2,
      },
+     {
+      label: 'Buy and Hold Portfolio Value',
+      data: results.map(result => result.buy_and_hold_value),
+      borderColor: '#FFD700', // Gold
+      backgroundColor: 'rgba(255, 215, 0, 0.2)',
+      borderWidth: 2,
+      fill: false,
+      pointRadius: 2,
+    },
    ],
  } : null;
 

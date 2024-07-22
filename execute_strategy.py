@@ -11,6 +11,12 @@ def run_user_strategy(data, strategy_code):
     strategy = env['strategy']
     return strategy(data)
 
+def calculate_buy_and_hold(data, initial_cash):
+    buy_price = data.iloc[0]['close']
+    holdings = initial_cash / buy_price
+    data['buy_and_hold_value'] = data['close'] * holdings
+    return data
+
 def calculate_portfolio_value(data, initial_cash):
     cash = initial_cash
     holdings = 0
@@ -87,6 +93,7 @@ if __name__ == "__main__":
             result = run_user_strategy(data, strategy_code)
 
         result = calculate_portfolio_value(result, initial_cash)
+        result = calculate_buy_and_hold(result, initial_cash)  
         result = result.replace({np.nan: None})
         result_dict = result.to_dict(orient='records')
         for row in result_dict:
