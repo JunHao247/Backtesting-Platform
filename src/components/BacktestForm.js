@@ -37,6 +37,7 @@ def strategy(data, window=20):
     return data
   `,
   'AI-Based Strategy': 'ai',
+  'Custom AI Strategy': 'custom_ai',
 };
 
 const BacktestForm = ({ onResults }) => {
@@ -46,12 +47,25 @@ const BacktestForm = ({ onResults }) => {
   const [initialCash, setInitialCash] = useState(10000);
   const [selectedStrategy, setSelectedStrategy] = useState(Object.keys(defaultStrategies)[0]);
   const [strategy, setStrategy] = useState(defaultStrategies[selectedStrategy]);
+  const [modelFile, setModelFile] = useState(null);
+  const [trainingScript, setTrainingScript] = useState(null);
   const [error, setError] = useState(null);
+  const [sessionId] = useState(`session-${Date.now()}`);
+
 
   const handleStrategyChange = (e) => {
     const newStrategy = e.target.value;
     setSelectedStrategy(newStrategy);
     setStrategy(defaultStrategies[newStrategy]);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (e.target.name === 'modelFile') {
+      setModelFile(file);
+    } else if (e.target.name === 'trainingScript') {
+      setTrainingScript(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -78,13 +92,29 @@ const BacktestForm = ({ onResults }) => {
       return;
     }
 
+    const formData = new FormData();
+    formData.append('symbol', symbol);
+    formData.append('startDate', startDate);
+    formData.append('endDate', endDate);
+    formData.append('initialCash', initialCash);
+    formData.append('strategy', strategy);
+    formData.append('sessionId', sessionId);
+
+
+    if (selectedStrategy === 'Custom AI Strategy') {
+      if (!modelFile || !trainingScript) {
+        setError('Please upload both model and training script files for Custom AI Strategy');
+        return;
+      }
+      formData.append('modelFile', modelFile);
+      formData.append('trainingScript', trainingScript);
+    }
+
     try {
-      const response = await axios.post('http://localhost:3000/api/backtest', {
-        symbol,
-        startDate,
-        endDate,
-        initialCash,
-        strategy,
+      const response = await axios.post('http://localhost:3000/api/backtest', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
       onResults(response.data);
     } catch (err) {
@@ -119,6 +149,18 @@ const BacktestForm = ({ onResults }) => {
               ))}
             </select>
           </label>
+          {selectedStrategy === 'Custom AI Strategy' && (
+            <div>
+              <label>
+                Model File:
+                <input type="file" name="modelFile" onChange={handleFileChange} />
+              </label>
+              <label>
+                Training Script:
+                <input type="file" name="trainingScript" onChange={handleFileChange} />
+              </label>
+            </div>
+          )}
         </div>
         <div className="rightContainer">
           <label>
