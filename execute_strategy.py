@@ -56,6 +56,17 @@ def apply_ai_strategy(data, symbol):
     data.loc[:, 'positions'] = data['signal'].diff()
     return data
 
+def apply_custom_ai_strategy(data, model_file, strategy_code):
+    if not os.path.exists(model_file):
+        raise ValueError(f"Model file {model_file} does not exist")
+
+    custom_model = joblib.load(model_file)
+
+    env = {'pd': pd, 'np': np, 'model': custom_model}
+    exec(strategy_code, env)
+    strategy = env['strategy']
+    return strategy(data)
+
 if __name__ == "__main__":
     try:
         input_data = json.loads(sys.stdin.read())
@@ -63,9 +74,15 @@ if __name__ == "__main__":
         strategy_code = input_data['strategy']
         initial_cash = float(input_data.get('initialCash'))
         symbol = input_data['symbol']
+        model_file = input_data.get('modelFile')
+        training_script = input_data.get('trainingScript')
 
         if strategy_code == 'ai':
             result = apply_ai_strategy(data, symbol)
+        elif strategy_code == 'custom_ai':
+            if not model_file or not training_script:
+                raise ValueError("Both model file and training script are required for custom AI strategy")
+            result = apply_custom_ai_strategy(data, model_file, strategy_code)
         else:
             result = run_user_strategy(data, strategy_code)
 

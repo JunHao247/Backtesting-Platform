@@ -2,13 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const multer = require('multer');
 const { spawn } = require('child_process');
 const Binance = require('binance-api-node').default;
 const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -17,6 +18,19 @@ const client = Binance({
   apiKey: process.env.BINANCE_API_KEY,
   apiSecret: process.env.BINANCE_API_SECRET,
 });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    const sessionId = req.body.sessionId || 'default';
+    const fileName = `${sessionId}_${file.fieldname}_${file.originalname}`;
+    cb(null, fileName);
+  },
+});
+
+const upload = multer({ storage });
 
 const getHistoricalKlines = async (symbol, interval, start, end) => {
   const klines = await client.candles({
@@ -40,15 +54,33 @@ app.get('/api/test', (req, res) => {
   res.send('Hello World!');
 });
 
-app.post('/api/backtest', async (req, res) => {
-  const { symbol, startDate, endDate, strategy, initialCash } = req.body;
+app.post('/api/backtest', upload.fields([
+  { name: 'modelFile', maxCount: 1 },
+  { name: 'trainingScript', maxCount: 1 }
+]), async (req, res) => {
+  const { symbol, startDate, endDate, strategy, initialCash, sessionId } = req.body;
+
   try {
     const data = await getHistoricalKlines(symbol, '1d', startDate, endDate);
     console.log('Historical data fetched:', data.length, 'records');
 
     const pythonProcess = spawn('python', ['execute_strategy.py']);
 
-    pythonProcess.stdin.write(JSON.stringify({ data, strategy, initialCash, symbol }));
+    const files = req.files || {};
+    const modelFile = files.modelFile ? files.modelFile[0].path : null;
+    const trainingScript = files.trainingScript ? files.trainingScript[0].path : null;
+
+    const input = {
+      data,
+      strategy,
+      initialCash,
+      symbol,
+      sessionId,
+      modelFile,
+      trainingScript
+    };
+
+    pythonProcess.stdin.write(JSON.stringify(input));
     pythonProcess.stdin.end();
 
     let result = '';
@@ -85,11 +117,13 @@ app.post('/api/backtest', async (req, res) => {
   }
 });
 
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'build')));
 
+// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname + '/build/index.html'));
 });
 
 app.listen(port, () => {
@@ -113,6 +147,7 @@ app.get('/api/generate-historical-data', async (req, res) => {
   }
 });
 
+// Add this endpoint to your server.js
 app.get('/api/update-model', async (req, res) => {
   try {
     const pythonProcess = spawn('python', ['training_model.py']);
