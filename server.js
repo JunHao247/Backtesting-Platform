@@ -47,6 +47,10 @@ const getHistoricalKlines = async (symbol, interval, start, end) => {
     low: parseFloat(k.low),
     close: parseFloat(k.close),
     volume: parseFloat(k.volume),
+    quoteAssetVolume: parseFloat(k.quoteAssetVolume),
+    numberOfTrades: k.numberOfTrades,
+    takerBuyBaseAssetVolume: parseFloat(k.takerBuyBaseAssetVolume),
+    takerBuyQuoteAssetVolume: parseFloat(k.takerBuyQuoteAssetVolume),
   }));
 };
 
@@ -63,6 +67,7 @@ app.post('/api/backtest', upload.fields([
   try {
     const data = await getHistoricalKlines(symbol, '1d', startDate, endDate);
     console.log('Historical data fetched:', data.length, 'records');
+    console.log('First record:', data[0]);  // Log the first record to see available fields
 
     const pythonProcess = spawn('python', ['execute_strategy.py']);
 
