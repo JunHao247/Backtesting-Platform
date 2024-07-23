@@ -48,9 +48,9 @@ const getHistoricalKlines = async (symbol, interval, start, end) => {
     close: parseFloat(k.close),
     volume: parseFloat(k.volume),
     quoteAssetVolume: parseFloat(k.quoteAssetVolume),
-    numberOfTrades: k.numberOfTrades,
-    takerBuyBaseAssetVolume: parseFloat(k.takerBuyBaseAssetVolume),
-    takerBuyQuoteAssetVolume: parseFloat(k.takerBuyQuoteAssetVolume),
+    numberOfTrades: k.numberOfTrades !== undefined ? k.numberOfTrades : null,
+    takerBuyBaseAssetVolume: k.takerBuyBaseAssetVolume !== undefined ? parseFloat(k.takerBuyBaseAssetVolume) : null,
+    takerBuyQuoteAssetVolume: k.takerBuyQuoteAssetVolume !== undefined ? parseFloat(k.takerBuyQuoteAssetVolume) : null,
   }));
 };
 
@@ -122,7 +122,6 @@ app.post('/api/backtest', upload.fields([
   }
 });
 
-
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -141,7 +140,6 @@ const getHistoricalData = async () => {
   fs.writeFileSync('historical_data.csv', 'timestamp,open,high,low,close,volume,quoteAssetVolume,numberOfTrades,takerBuyBaseAssetVolume,takerBuyQuoteAssetVolume\n' + csv);
   console.log('Historical data saved to historical_data.csv');
 };
-
 
 app.get('/api/generate-historical-data', async (req, res) => {
   try {

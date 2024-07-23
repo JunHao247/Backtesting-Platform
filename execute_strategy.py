@@ -83,6 +83,7 @@ if __name__ == "__main__":
         model_file = input_data.get('modelFile')
         training_script = input_data.get('trainingScript')
 
+        print("Initial Data Check: ", data.head())
         if strategy_code == 'ai':
             result = apply_ai_strategy(data, symbol)
         elif strategy_code == 'custom_ai':
@@ -93,7 +94,7 @@ if __name__ == "__main__":
             result = run_user_strategy(data, strategy_code)
 
         result = calculate_portfolio_value(result, initial_cash)
-        result = calculate_buy_and_hold(result, initial_cash)  
+        result = calculate_buy_and_hold(result, initial_cash)
         result = result.replace({np.nan: None})
         result_dict = result.to_dict(orient='records')
         for row in result_dict:
