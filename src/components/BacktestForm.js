@@ -36,6 +36,7 @@ def strategy(data, window=20):
     data['positions'] = data['signal'].diff()
     return data
   `,
+  'Custom Strategy': '', 
   'AI-Based Strategy': 'ai',
   'Custom AI Strategy': 'custom_ai',
 };
@@ -123,6 +124,11 @@ const BacktestForm = ({ onResults }) => {
     }
   };
 
+  const setCustomStrategy = () => {
+    setSelectedStrategy('Custom Strategy');
+  };
+
+
   return (
     <div className="card">
       <form onSubmit={handleSubmit} className="form-container">
@@ -165,7 +171,7 @@ const BacktestForm = ({ onResults }) => {
         <div className="rightContainer">
           <label>
             Python Code:
-            <StrategyEditor onStrategyChange={setStrategy} presetStrategy={strategy} />
+            <StrategyEditor onStrategyChange={setStrategy} presetStrategy={strategy} setCustomStrategy={setCustomStrategy}/>
           </label>
           <button type="submit">Run Backtest</button>
         </div>

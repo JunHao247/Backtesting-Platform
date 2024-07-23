@@ -1,17 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const StrategyEditor = ({ onStrategyChange, presetStrategy }) => {
+const StrategyEditor = ({ onStrategyChange, presetStrategy, setCustomStrategy }) => {
+  const [code, setCode] = useState(presetStrategy);
+
   useEffect(() => {
-    onStrategyChange(presetStrategy);
-  }, [presetStrategy, onStrategyChange]);
+    setCode(presetStrategy);
+  }, [presetStrategy]);
+
+  const handleChange = (e) => {
+    setCode(e.target.value);
+    onStrategyChange(e.target.value);
+    setCustomStrategy(); // Notify the parent component that the strategy is being edited
+  };
 
   return (
-    <textarea className = "strategy"
-      onChange={(e) => onStrategyChange(e.target.value)}
-      value={presetStrategy}
-      placeholder="Enter your strategy here"
+    <textarea value={code} 
+    onChange={handleChange} 
+    rows="20" 
+    cols="50"
+    placeholder="Enter your strategy here"
+    className = "strategy"
     />
   );
 };
 
 export default StrategyEditor;
+
