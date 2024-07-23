@@ -137,10 +137,11 @@ app.listen(port, () => {
 
 const getHistoricalData = async () => {
   const data = await getHistoricalKlines('BTCUSDT', '1d', '2017-01-01', '2024-01-01');
-  const csv = data.map(d => `${d.timestamp},${d.open},${d.high},${d.low},${d.close},${d.volume}`).join('\n');
-  fs.writeFileSync('historical_data.csv', 'timestamp,open,high,low,close,volume\n' + csv);
+  const csv = data.map(d => `${d.timestamp},${d.open},${d.high},${d.low},${d.close},${d.volume},${d.quoteAssetVolume},${d.numberOfTrades},${d.takerBuyBaseAssetVolume},${d.takerBuyQuoteAssetVolume}`).join('\n');
+  fs.writeFileSync('historical_data.csv', 'timestamp,open,high,low,close,volume,quoteAssetVolume,numberOfTrades,takerBuyBaseAssetVolume,takerBuyQuoteAssetVolume\n' + csv);
   console.log('Historical data saved to historical_data.csv');
 };
+
 
 app.get('/api/generate-historical-data', async (req, res) => {
   try {
