@@ -124,10 +124,12 @@ const BacktestForm = ({ onResults }) => {
     }
   };
 
-  const setCustomStrategy = () => {
-    setSelectedStrategy('Custom Strategy');
+  const setCustomStrategy = (newStrategyCode) => {
+    if (['Moving Average Crossover', 'Momentum Strategy', 'Breakout Strategy'].includes(selectedStrategy)) {
+      setSelectedStrategy('Custom Strategy');
+    }
+    setStrategy(newStrategyCode);
   };
-
 
   return (
     <div className="card">
