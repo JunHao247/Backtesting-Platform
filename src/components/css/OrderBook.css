@@ -1,0 +1,83 @@
+.order-book {
+  text-align: left;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.order-book-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.order-book-table {
+  width: 100%;
+}
+
+.order-book-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.order-book-table th, .order-book-table td {
+  border: 1px solid #333;
+  padding: 8px;
+  text-align: right;
+}
+
+.order-book-table th {
+  background-color: #444;
+  color: #fff;
+}
+
+.ticker{
+  background-color: #444;
+  color: #fff;
+  padding: 8px;
+
+}
+
+.order-book-table td {
+  background-color: #222;
+  color: #fff;
+}
+
+.liquidity-info {
+  margin-top: 20px;
+}
+
+.liquidity-info h3 {
+  margin: 0 0 10px 0;
+  color: #00ff00;
+}
+
+.liquidity-info p {
+  margin: 5px 0;
+}
+
+.historical-data {
+  margin-top: 20px;
+}
+
+.historical-data table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.historical-data th, .historical-data td {
+  border: 1px solid #333;
+  padding: 8px;
+  text-align: right;
+}
+
+.historical-data th {
+  background-color: #444;
+  color: #fff;
+}
+
+.historical-data td {
+  background-color: #222;
+  color: #fff;
+}

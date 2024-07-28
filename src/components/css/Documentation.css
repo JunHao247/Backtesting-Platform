@@ -1,0 +1,30 @@
+
+.documentation {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    color: #FFFFFF;
+    background-color: #282c34;
+    font-family: OpenSans, sans-serif;
+    box-sizing: border-box;
+  }
+  
+  .documentation h1,
+  .documentation h2,
+  .documentation h3 {
+    color: #02FFC7;
+  }
+  
+  .documentation pre {
+    background-color: #1e1e1e;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .documentation code {
+    color: #FFD700;
+  }
+  
