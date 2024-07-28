@@ -89,36 +89,7 @@ print('Model training complete and saved')
           <li>Average Ask Price: Weighted average price of all asks.</li>
           <li>Liquidity Ratio: Ratio of total bid volume to total ask volume.</li>
         </ul>
-        <pre>
-          <code>
-{`
-const fetchHistoricalData = async () => {
-  const startTime = moment().subtract(1, 'days').startOf('day').unix() * 1000;
-  const endTime = moment().subtract(1, 'days').endOf('day').unix() * 1000;
-
-  const response = await axios.get('https://api.binance.com/api/v3/klines', {
-    params: {
-      symbol,
-      interval: '1h',
-      startTime,
-      endTime,
-    },
-  });
-
-  const historical = response.data.map((item) => ({
-    timestamp: moment(item[0]).format('YYYY-MM-DD HH:mm:ss'),
-    open: parseFloat(item[1]),
-    high: parseFloat(item[2]),
-    low: parseFloat(item[3]),
-    close: parseFloat(item[4]),
-    volume: parseFloat(item[5]),
-  }));
-
-  setHistoricalData(historical);
-};
-`}
-          </code>
-        </pre>
+       
       </section>
 
     </div>

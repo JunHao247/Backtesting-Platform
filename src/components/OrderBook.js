@@ -11,6 +11,7 @@ const OrderBook = () => {
   const [liquidity, setLiquidity] = useState({ totalBidVolume: 0, totalAskVolume: 0, spread: 0, avgBidPrice: 0, avgAskPrice: 0, liquidityRatio: 0 });
   const [interval, setInterval] = useState(10); // Time interval in seconds
   const [historicalData, setHistoricalData] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchHistoricalData();
@@ -56,28 +57,34 @@ const OrderBook = () => {
   }, [symbol]);
 
   const fetchHistoricalData = async () => {
-    const startTime = moment().subtract(1, 'days').startOf('day').unix() * 1000;
-    const endTime = moment().subtract(1, 'days').endOf('day').unix() * 1000;
+    try {
+      const startTime = moment().subtract(1, 'days').startOf('day').unix() * 1000;
+      const endTime = moment().subtract(1, 'days').endOf('day').unix() * 1000;
 
-    const response = await axios.get('https://api.binance.com/api/v3/klines', {
-      params: {
-        symbol,
-        interval: '1h',
-        startTime,
-        endTime,
-      },
-    });
+      const response = await axios.get('https://api.binance.com/api/v3/klines', {
+        params: {
+          symbol,
+          interval: '1h',
+          startTime,
+          endTime,
+        },
+      });
 
-    const historical = response.data.map((item) => ({
-      timestamp: moment(item[0]).format('YYYY-MM-DD HH:mm:ss'),
-      open: parseFloat(item[1]),
-      high: parseFloat(item[2]),
-      low: parseFloat(item[3]),
-      close: parseFloat(item[4]),
-      volume: parseFloat(item[5]),
-    }));
+      const historical = response.data.map((item) => ({
+        timestamp: moment(item[0]).format('YYYY-MM-DD HH:mm:ss'),
+        open: parseFloat(item[1]),
+        high: parseFloat(item[2]),
+        low: parseFloat(item[3]),
+        close: parseFloat(item[4]),
+        volume: parseFloat(item[5]),
+      }));
 
-    setHistoricalData(historical);
+      setHistoricalData(historical);
+      setError(null); // Clear any previous error
+    } catch (err) {
+      setError('Failed to fetch historical data. Please try again.');
+      console.error(err);
+    }
   };
 
   const handleSymbolChange = (e) => {
@@ -107,6 +114,7 @@ const OrderBook = () => {
         Time Interval (seconds):
         <input type="number" value={interval} onChange={handleIntervalChange} />
       </label>
+      {error && <div className="error">{error}</div>}
       <div className="liquidity-info">
         <h3>Liquidity Information</h3>
         <p>Total Bid Volume: {liquidity.totalBidVolume.toFixed(2)}</p>
