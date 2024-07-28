@@ -47,6 +47,10 @@ const getHistoricalKlines = async (symbol, interval, start, end) => {
     low: parseFloat(k.low),
     close: parseFloat(k.close),
     volume: parseFloat(k.volume),
+    quoteAssetVolume: parseFloat(k.quoteAssetVolume),
+    takerBuyBaseAssetVolume: k.takerBuyBaseAssetVolume !== undefined ? parseFloat(k.takerBuyBaseAssetVolume) : null,
+    takerBuyQuoteAssetVolume: k.takerBuyQuoteAssetVolume !== undefined ? parseFloat(k.takerBuyQuoteAssetVolume) : null,
+
    
   }));
 };
@@ -64,7 +68,6 @@ app.post('/api/backtest', upload.fields([
   try {
     const data = await getHistoricalKlines(symbol, '1d', startDate, endDate);
     console.log('Historical data fetched:', data.length, 'records');
-    console.log('First record:', data[0]);  // Log the first record to see available fields
 
     const pythonProcess = spawn('python', ['execute_strategy.py']);
 
@@ -133,8 +136,9 @@ app.listen(port, () => {
 
 const getHistoricalData = async () => {
   const data = await getHistoricalKlines('BTCUSDT', '1d', '2017-01-01', '2024-01-01');
-  const csv = data.map(d => `${d.timestamp},${d.open},${d.high},${d.low},${d.close},${d.volume}`).join('\n');
-  fs.writeFileSync('historical_data.csv', 'timestamp,open,high,low,close,volume\n' + csv);
+  const csv = data.map(d => `${d.timestamp},${d.open},${d.high},${d.low},${d.close},${d.volume},${d.quoteAssetVolume},${d.takerBuyBaseAssetVolume},${d.takerBuyQuoteAssetVolume}`).join('\n');
+  fs.writeFileSync('historical_data.csv', 'timestamp,open,high,low,close,volume,quoteAssetVolume,takerBuyBaseAssetVolume,takerBuyQuoteAssetVolume\n' + csv);
+
   console.log('Historical data saved to historical_data.csv');
 };
 

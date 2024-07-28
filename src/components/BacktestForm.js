@@ -53,9 +53,7 @@ const BacktestForm = ({ onResults }) => {
   const [error, setError] = useState(null);
   const [sessionId] = useState(`session-${Date.now()}`);
 
-
-  const handleStrategyChange = (e) => {
-    const newStrategy = e.target.value;
+  const handleStrategyChange = (newStrategy) => {
     setSelectedStrategy(newStrategy);
     setStrategy(defaultStrategies[newStrategy]);
   };
@@ -100,7 +98,6 @@ const BacktestForm = ({ onResults }) => {
     formData.append('initialCash', initialCash);
     formData.append('strategy', strategy);
     formData.append('sessionId', sessionId);
-
 
     if (selectedStrategy === 'Custom AI Strategy') {
       if (!modelFile || !trainingScript) {
@@ -149,7 +146,7 @@ const BacktestForm = ({ onResults }) => {
           </label>
           <label>
             Strategy:
-            <select value={selectedStrategy} onChange={handleStrategyChange}>
+            <select value={selectedStrategy} onChange={(e) => handleStrategyChange(e.target.value)}>
               {Object.keys(defaultStrategies).map((strat) => (
                 <option key={strat} value={strat}>
                   {strat}
@@ -173,7 +170,11 @@ const BacktestForm = ({ onResults }) => {
         <div className="rightContainer">
           <label>
             Python Code:
-            <StrategyEditor onStrategyChange={setStrategy} presetStrategy={strategy} setCustomStrategy={setCustomStrategy}/>
+            <StrategyEditor 
+              onStrategyChange={setStrategy} 
+              presetStrategy={strategy} 
+              setCustomStrategy={setCustomStrategy}
+            />
           </label>
           <button type="submit">Run Backtest</button>
         </div>
