@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Backtesting-Platform/static/css/main.e4a94c07.css",
-    "main.js": "/Backtesting-Platform/static/js/main.9cc66300.js",
+    "main.css": "/Backtesting-Platform/static/css/main.e6d16ff0.css",
+    "main.js": "/Backtesting-Platform/static/js/main.18dc1273.js",
     "static/js/488.227ba61c.chunk.js": "/Backtesting-Platform/static/js/488.227ba61c.chunk.js",
     "index.html": "/Backtesting-Platform/index.html",
-    "main.e4a94c07.css.map": "/Backtesting-Platform/static/css/main.e4a94c07.css.map",
-    "main.9cc66300.js.map": "/Backtesting-Platform/static/js/main.9cc66300.js.map",
+    "main.e6d16ff0.css.map": "/Backtesting-Platform/static/css/main.e6d16ff0.css.map",
+    "main.18dc1273.js.map": "/Backtesting-Platform/static/js/main.18dc1273.js.map",
     "488.227ba61c.chunk.js.map": "/Backtesting-Platform/static/js/488.227ba61c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e4a94c07.css",
-    "static/js/main.9cc66300.js"
+    "static/css/main.e6d16ff0.css",
+    "static/js/main.18dc1273.js"
   ]
 }
