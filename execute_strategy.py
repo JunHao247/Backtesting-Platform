@@ -83,7 +83,10 @@ if __name__ == "__main__":
         model_file = input_data.get('modelFile')
         training_script = input_data.get('trainingScript')
 
-        print("Initial Data Check: ", data.head())
+        # Ensure no column has 'undefined' values
+        data = data.replace({None: np.nan, 'undefined': np.nan})
+        data = data.fillna(0)
+
         if strategy_code == 'ai':
             result = apply_ai_strategy(data, symbol)
         elif strategy_code == 'custom_ai':
