@@ -1,3 +1,8 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 /* Reset some default styles */
 body, html, h1, h2, h3, h4, h5, h6, p, div {
   margin: 0;
@@ -13,10 +18,14 @@ body {
 }
 
 /* Header styling */
+
 .App-header {
-  background-color: #1f1f1f;
+  background-color: #282c34;
   padding: 20px;
-  text-align: center;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .App-header h1 {
@@ -29,8 +38,8 @@ body {
 }
 
 .App-header nav a {
-  margin: 0 10px;
   color: #61dafb;
+  margin: 0 10px;
   text-decoration: none;
 }
 
@@ -39,13 +48,16 @@ body {
 }
 
 /* Main content styling */
-.App-main {
+main {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
-
 main {
   display: flex;
   flex-direction: column;
@@ -192,3 +204,32 @@ th {
 }
 
 
+
+.documentation {
+  width: 100%;
+  max-width: 100%;
+  padding: 20px;
+  color: #FFFFFF;
+  background-color: #282c34;
+  font-family: 'Courier New', Courier, monospace;
+  box-sizing: border-box;
+}
+
+.documentation h1,
+.documentation h2,
+.documentation h3 {
+  color: #02FFC7;
+}
+
+.documentation pre {
+  background-color: #1e1e1e;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.documentation code {
+  color: #FFD700;
+}
