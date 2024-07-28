@@ -170,6 +170,7 @@ const ResultsDisplay = ({ results }) => {
               <th>Volume</th>
               {hasShortMavg && <th>Short MAvg</th>}
               {hasLongMavg && <th>Long MAvg</th>}
+              <th>Quote Asset Volume</th>
               <th>Signal</th>
               <th>Positions</th>
               <th>Portfolio Value</th>
@@ -186,6 +187,7 @@ const ResultsDisplay = ({ results }) => {
                 <td>{Math.round(result.volume)}</td>
                 {hasShortMavg && <td>{Math.round(result.short_mavg)}</td>}
                 {hasLongMavg && <td>{Math.round(result.long_mavg)}</td>}
+                <td>{Math.round(result.quoteAssetVolume)}</td>
                 <td>{result.signal}</td>
                 <td>{result.positions}</td>
                 <td>{Math.round(result.portfolio_value)}</td>

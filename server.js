@@ -48,8 +48,6 @@ const getHistoricalKlines = async (symbol, interval, start, end) => {
     close: parseFloat(k.close),
     volume: parseFloat(k.volume),
     quoteAssetVolume: parseFloat(k.quoteAssetVolume),
-    takerBuyBaseAssetVolume: k.takerBuyBaseAssetVolume !== undefined ? parseFloat(k.takerBuyBaseAssetVolume) : null,
-    takerBuyQuoteAssetVolume: k.takerBuyQuoteAssetVolume !== undefined ? parseFloat(k.takerBuyQuoteAssetVolume) : null,
 
    
   }));
@@ -136,8 +134,8 @@ app.listen(port, () => {
 
 const getHistoricalData = async () => {
   const data = await getHistoricalKlines('BTCUSDT', '1d', '2017-01-01', '2024-01-01');
-  const csv = data.map(d => `${d.timestamp},${d.open},${d.high},${d.low},${d.close},${d.volume},${d.quoteAssetVolume},${d.takerBuyBaseAssetVolume},${d.takerBuyQuoteAssetVolume}`).join('\n');
-  fs.writeFileSync('historical_data.csv', 'timestamp,open,high,low,close,volume,quoteAssetVolume,takerBuyBaseAssetVolume,takerBuyQuoteAssetVolume\n' + csv);
+  const csv = data.map(d => `${d.timestamp},${d.open},${d.high},${d.low},${d.close},${d.volume},${d.quoteAssetVolume}`).join('\n');
+  fs.writeFileSync('historical_data.csv', 'timestamp,open,high,low,close,volume,quoteAssetVolume\n' + csv);
 
   console.log('Historical data saved to historical_data.csv');
 };
