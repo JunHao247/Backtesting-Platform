@@ -40,14 +40,7 @@ const DatabaseSchema = () => {
             <td>quoteAssetVolume</td>
             <td>Volume of the quote asset traded.</td>
           </tr>
-          <tr>
-            <td>takerBuyBaseAssetVolume</td>
-            <td>Volume of the base asset bought with taker buy orders.</td>
-          </tr>
-          <tr>
-            <td>takerBuyQuoteAssetVolume</td>
-            <td>Volume of the quote asset bought with taker buy orders.</td>
-          </tr>
+    
         </tbody>
       </table>
     </div>
