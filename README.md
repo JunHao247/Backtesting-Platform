@@ -49,3 +49,24 @@ Alternatively, you can clone the repository directly from GitHub to avoid this i
 
 ```bash
 git clone https://github.com/your-username/your-repository-name.git
+```
+
+System Architecture Diagram
+```mermaid
+graph LR;
+    App["App Component"] --> BacktestForm["BacktestForm Component"]
+    App --> ResultsDisplay["ResultsDisplay Component"]
+    App --> OrderBook["OrderBook Component"]
+    App --> Analysis["Analysis Component"]
+    App --> Documentation["Documentation Component"]
+
+    BacktestForm --> ExecuteStrategy["ExecuteStrategy Script"]
+    ExecuteStrategy --> BinanceAPI["Binance API"]
+
+    OrderBook --> BinanceAPI
+
+    ExecuteStrategy --> ResultsDisplay
+    ResultsDisplay --> Analysis
+    OrderBook --> Analysis
+    Analysis --> Documentation
+```
