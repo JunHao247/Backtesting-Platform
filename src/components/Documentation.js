@@ -7,6 +7,50 @@ const Documentation = () => {
       <h2>Documentation</h2>
 
       <section>
+        <h3>Database Schema</h3>
+        <div className="database-schema">
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>timestamp</td>
+                <td>The timestamp of the kline/candlestick.</td>
+              </tr>
+              <tr>
+                <td>open</td>
+                <td>Opening price during the kline interval.</td>
+              </tr>
+              <tr>
+                <td>high</td>
+                <td>Highest price during the kline interval.</td>
+              </tr>
+              <tr>
+                <td>low</td>
+                <td>Lowest price during the kline interval.</td>
+              </tr>
+              <tr>
+                <td>close</td>
+                <td>Closing price during the kline interval.</td>
+              </tr>
+              <tr>
+                <td>volume</td>
+                <td>Trading volume during the kline interval.</td>
+              </tr>
+              <tr>
+                <td>quoteAssetVolume</td>
+                <td>Volume of the quote asset traded.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      
+      <section>
         <h3>Creating Strategies</h3>
         <p>
           To create a strategy, you need to define a function named <code>strategy</code> that takes a DataFrame as input and returns a DataFrame with buy/sell signals.
@@ -89,8 +133,9 @@ print('Model training complete and saved')
           <li>Average Ask Price: Weighted average price of all asks.</li>
           <li>Liquidity Ratio: Ratio of total bid volume to total ask volume.</li>
         </ul>
-       
       </section>
+
+     
 
     </div>
   );

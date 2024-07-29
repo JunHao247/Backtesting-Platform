@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import BacktestForm from './components/BacktestForm';
 import ResultsDisplay from './components/ResultsDisplay';
-import DatabaseSchema from './components/DatabaseSchema';
+import Analysis from './components/Analysis';
 import Documentation from './components/Documentation';
 import OrderBook from './components/OrderBook';
 import './App.css';
@@ -17,7 +17,7 @@ const App = () => {
         <nav>
           <a href="#home" onClick={() => setView('home')}>Backtest</a>
           <a href="#orderbook" onClick={() => setView('orderbook')}>Order Book</a>
-          <a href="#database" onClick={() => setView('database')}>Database Schema</a>
+          <a href="#analysis" onClick={() => setView('analysis')}>Analysis</a>
           <a href="#documentation" onClick={() => setView('documentation')}>Documentation</a>
         </nav>
       </header>
@@ -29,7 +29,7 @@ const App = () => {
           </>
         )}
         {view === 'orderbook' && <OrderBook />}
-        {view === 'database' && <DatabaseSchema />}
+        {view === 'analysis' && <Analysis />}
         {view === 'documentation' && <Documentation />}
       </main>
     </div>

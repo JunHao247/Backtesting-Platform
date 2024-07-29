@@ -1,0 +1,26 @@
+.analysis {
+    text-align: left;
+    width: 80%;
+    margin: 0 auto;
+    color: white;
+  }
+  
+  .metrics {
+    margin-top: 20px;
+  }
+  
+  .metrics h3 {
+    margin: 0 0 10px 0;
+    color: #00ff00;
+  }
+  
+  .metrics ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .metrics li {
+    margin: 5px 0;
+    font-size: 16px;
+  }
+  
