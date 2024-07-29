@@ -19,18 +19,17 @@ const OrderBook = () => {
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
-      const newBids = data.bids.map(([price, amount]) => ({
+      const newBids = data.bids.map(([price, amount], index) => ({
         price: parseFloat(price),
         amount: parseFloat(amount),
         type: 'Bid',
-        timestamp,
+        timestamp: moment().subtract(index, 'seconds').format('YYYY-MM-DD HH:mm:ss'),
       }));
-      const newAsks = data.asks.map(([price, amount]) => ({
+      const newAsks = data.asks.map(([price, amount], index) => ({
         price: parseFloat(price),
         amount: parseFloat(amount),
         type: 'Ask',
-        timestamp,
+        timestamp: moment().subtract(index, 'seconds').format('YYYY-MM-DD HH:mm:ss'),
       }));
 
       setBids(newBids);
@@ -110,10 +109,7 @@ const OrderBook = () => {
         Cryptocurrency Ticker:
         <input className="ticker" type="text" value={symbol} onChange={handleSymbolChange} />
       </label>
-      <label>
-        Time Interval (seconds):
-        <input type="number" value={interval} onChange={handleIntervalChange} />
-      </label>
+      
       {error && <div className="error">{error}</div>}
       <div className="liquidity-info">
         <h3>Liquidity Information</h3>
@@ -130,8 +126,8 @@ const OrderBook = () => {
             <tr>
               <th>Timestamp</th>
               <th>Type</th>
-              <th>Amount</th>
-              <th>Price</th>
+              <th>Amount Bought/Sold </th>
+              <th>Price of Cryptocurrency</th>
             </tr>
           </thead>
           <tbody>
