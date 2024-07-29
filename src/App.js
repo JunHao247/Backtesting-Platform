@@ -8,7 +8,13 @@ import './App.css';
 
 const App = () => {
   const [results, setResults] = useState(null);
+  const [metrics, setMetrics] = useState(null);
   const [view, setView] = useState('home');
+
+  const handleResults = (response) => {
+    setResults(response.results);
+    setMetrics(response.metrics);
+  };
 
   return (
     <div className="App">
@@ -24,12 +30,12 @@ const App = () => {
       <main>
         {view === 'home' && (
           <>
-            <BacktestForm onResults={setResults} />
-            {results && <ResultsDisplay results={results} />}
+            <BacktestForm onResults={handleResults} />
+            {results && <ResultsDisplay results={{ results }} />} {/* Pass results correctly */}
           </>
         )}
         {view === 'orderbook' && <OrderBook />}
-        {view === 'analysis' && <Analysis />}
+        {view === 'analysis' && metrics && <Analysis metrics={metrics} />} {/* Pass metrics to Analysis */}
         {view === 'documentation' && <Documentation />}
       </main>
     </div>

@@ -73,6 +73,15 @@ def apply_custom_ai_strategy(data, model_file, strategy_code):
     strategy = env['strategy']
     return strategy(data)
 
+def calculate_metrics(data):
+    metrics = {}
+    metrics['cumulative_returns'] = data['portfolio_value'].iloc[-1] / data['portfolio_value'].iloc[0] - 1
+    metrics['annualized_volatility'] = data['portfolio_value'].pct_change().std() * np.sqrt(252)
+    metrics['sharpe_ratio'] = metrics['cumulative_returns'] / metrics['annualized_volatility']
+    metrics['max_drawdown'] = ((data['portfolio_value'].cummax() - data['portfolio_value']) / data['portfolio_value'].cummax()).max()
+    metrics['sortino_ratio'] = metrics['cumulative_returns'] / data['portfolio_value'].pct_change().clip(upper=0).std()
+    return metrics
+
 if __name__ == "__main__":
     try:
         input_data = json.loads(sys.stdin.read())
@@ -98,12 +107,13 @@ if __name__ == "__main__":
 
         result = calculate_portfolio_value(result, initial_cash)
         result = calculate_buy_and_hold(result, initial_cash)
+        metrics = calculate_metrics(result)
         result = result.replace({np.nan: None})
         result_dict = result.to_dict(orient='records')
         for row in result_dict:
             if isinstance(row['timestamp'], pd.Timestamp):
                 row['timestamp'] = row['timestamp'].isoformat()
-        output = json.dumps(result_dict)
+        output = json.dumps({"results": result_dict, "metrics": metrics})
         print(output)
     except Exception as e:
         error_message = f"Error: {str(e)}"

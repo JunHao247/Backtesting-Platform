@@ -23,17 +23,19 @@ ChartJS.register(
 );
 
 const ResultsDisplay = ({ results }) => {
+  // Ensure results is an array
+  const resultArray = results.results || [];
   const formatDate = (timestamp) => moment(timestamp).format('MMM DD, YYYY');
 
-  const hasShortMavg = results && results.some(result => 'short_mavg' in result);
-  const hasLongMavg = results && results.some(result => 'long_mavg' in result);
+  const hasShortMavg = resultArray.some(result => 'short_mavg' in result);
+  const hasLongMavg = resultArray.some(result => 'long_mavg' in result);
 
-  const priceChartData = results ? {
-    labels: results.map(result => formatDate(result.timestamp)),
+  const priceChartData = resultArray.length ? {
+    labels: resultArray.map(result => formatDate(result.timestamp)),
     datasets: [
       {
         label: 'Close Price',
-        data: results.map(result => result.close),
+        data: resultArray.map(result => result.close),
         borderColor: '#02FFC7',
         backgroundColor: 'rgba(0, 0, 0, 0)',
         borderWidth: 2,
@@ -42,7 +44,7 @@ const ResultsDisplay = ({ results }) => {
       },
       ...(hasShortMavg ? [{
         label: 'Short Moving Average',
-        data: results.map(result => result.short_mavg),
+        data: resultArray.map(result => result.short_mavg),
         borderColor: '#FF1493', // Deep pink
         backgroundColor: 'rgba(255, 20, 147, 0.2)',
         borderWidth: 2,
@@ -51,7 +53,7 @@ const ResultsDisplay = ({ results }) => {
       }] : []),
       ...(hasLongMavg ? [{
         label: 'Long Moving Average',
-        data: results.map(result => result.long_mavg),
+        data: resultArray.map(result => result.long_mavg),
         borderColor: '#1E90FF', // Dodger blue
         backgroundColor: 'rgba(30, 144, 255, 0.2)',
         borderWidth: 2,
@@ -60,36 +62,36 @@ const ResultsDisplay = ({ results }) => {
       }] : []),
       {
         label: 'Buy Signal',
-        data: results.map(result => (result.positions === 1 ? result.close : null)),
+        data: resultArray.map(result => (result.positions === 1 ? result.close : null)),
         borderColor: '#00FF00', // Bright green
         backgroundColor: 'rgba(0, 255, 0, 0.5)',
         borderWidth: 0,
         fill: false,
-        pointRadius: results.map(result => (result.positions === 1 ? 6 : 0)),
-        pointBorderWidth: results.map(result => (result.positions === 1 ? 3 : 0)),
+        pointRadius: resultArray.map(result => (result.positions === 1 ? 6 : 0)),
+        pointBorderWidth: resultArray.map(result => (result.positions === 1 ? 3 : 0)),
         pointStyle: 'triangle',
       },
       {
         label: 'Sell Signal',
-        data: results.map(result => (result.positions === -1 ? result.close : null)),
+        data: resultArray.map(result => (result.positions === -1 ? result.close : null)),
         borderColor: '#FF0000', // Bright red
         backgroundColor: 'rgba(255, 0, 0, 0.5)',
         borderWidth: 0,
         fill: false,
-        pointRadius: results.map(result => (result.positions === -1 ? 6 : 0)),
-        pointBorderWidth: results.map(result => (result.positions === -1 ? 3 : 0)),
+        pointRadius: resultArray.map(result => (result.positions === -1 ? 6 : 0)),
+        pointBorderWidth: resultArray.map(result => (result.positions === -1 ? 3 : 0)),
         pointStyle: 'triangle',
         rotation: 180,
       },
     ],
   } : null;
 
-  const portfolioChartData = results ? {
-    labels: results.map(result => formatDate(result.timestamp)),
+  const portfolioChartData = resultArray.length ? {
+    labels: resultArray.map(result => formatDate(result.timestamp)),
     datasets: [
       {
         label: 'Portfolio Value',
-        data: results.map(result => result.portfolio_value),
+        data: resultArray.map(result => result.portfolio_value),
         borderColor: '#9370DB', // Medium purple
         backgroundColor: 'rgba(147, 112, 219, 0.2)',
         borderWidth: 2,
@@ -98,7 +100,7 @@ const ResultsDisplay = ({ results }) => {
       },
       {
         label: 'Buy and Hold Value',
-        data: results.map((result, index) => result.close * (results[0].portfolio_value / results[0].close)),
+        data: resultArray.map((result, index) => result.close * (resultArray[0].portfolio_value / resultArray[0].close)),
         borderColor: '#FFD700', // Gold
         backgroundColor: 'rgba(255, 215, 0, 0.2)',
         borderWidth: 2,
@@ -118,7 +120,6 @@ const ResultsDisplay = ({ results }) => {
           },
         },
       },
-
       tooltip: {
         titleFont: { size: 14 },
         bodyFont: { size: 12 },
@@ -144,7 +145,7 @@ const ResultsDisplay = ({ results }) => {
     },
   };
 
-  if (!results || results.length === 0) {
+  if (!resultArray.length) {
     return null;
   }
 
@@ -177,7 +178,7 @@ const ResultsDisplay = ({ results }) => {
             </tr>
           </thead>
           <tbody>
-            {results.map((result, index) => (
+            {resultArray.map((result, index) => (
               <tr key={index}>
                 <td>{formatDate(result.timestamp)}</td>
                 <td>{Math.round(result.open)}</td>
