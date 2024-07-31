@@ -5,9 +5,10 @@ const Documentation = () => {
   return (
     <div className="documentation">
       <h2>Documentation</h2>
-
       <section>
         <h3>Database Schema</h3>
+        <br></br>
+        <p>Only the parameters stated below are able to be retrieved and edited in the trading strategy under <b>"Backtest"</b> tab. </p>
         <div className="database-schema">
           <table>
             <thead>
@@ -49,11 +50,16 @@ const Documentation = () => {
           </table>
         </div>
       </section>
-      
+      <br></br>
       <section>
         <h3>Creating Strategies</h3>
+        <br></br>
         <p>
           To create a strategy, you need to define a function named <code>strategy</code> that takes a DataFrame as input and returns a DataFrame with buy/sell signals.
+        </p>
+        <br></br>
+        <p>
+          Below is a sample strategy for the Double Moving Crossover Average strategy:
         </p>
         <pre>
           <code>
@@ -73,9 +79,15 @@ def strategy(data):
       </section>
 
       <section>
-        <h3>Training Model Example</h3>
+        <h3>Uploading Custom AI Trained Model</h3>
+        <br></br>
         <p>
-          Below is an example of how to train a machine learning model using historical data:
+          Users will need to write their training model in python and save as <b>".py"</b> file.
+          Additionally, you need to generate a <b>".pkl"</b> file from the training model.
+        </p>
+        <br></br>
+        <p>
+          Below is an example of how to train a machine learning model using historical data and generate the pkl file:
         </p>
         <pre>
           <code>
@@ -112,10 +124,16 @@ print('Model training complete and saved')
 `}
           </code>
         </pre>
+
+        <p>
+          ** Note that joblib.dump helps to generate the testing_modelFile.pkl. There is no naming convention required for the pkl file.
+        </p>
+        <br></br>
       </section>
 
       <section>
         <h3>Real-Time Order Book</h3>
+        <br></br>
         <p>
           The real-time order book allows you to view the current market depth for a given cryptocurrency ticker. It includes the following features:
         </p>
