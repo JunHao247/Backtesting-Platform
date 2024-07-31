@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './css/OrderBook.css';
 import moment from 'moment';
 import axios from 'axios';
@@ -7,58 +7,13 @@ import { select, arc, scaleLinear } from 'd3';
 const OrderBook = () => {
   const [symbol, setSymbol] = useState('BTCUSDT');
   const [orderBook, setOrderBook] = useState([]);
-  const [bids, setBids] = useState([]);
-  const [asks, setAsks] = useState([]);
   const [liquidity, setLiquidity] = useState({ totalBidVolume: 0, totalAskVolume: 0, spread: 0, avgBidPrice: 0, avgAskPrice: 0, liquidityRatio: 0 });
   const [interval, setInterval] = useState(10); // Time interval in seconds
   const [historicalData, setHistoricalData] = useState([]);
   const [fearGreedIndex, setFearGreedIndex] = useState(50); // Default value for Fear and Greed Index
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchHistoricalData();
-    fetchFearGreedIndex();
-    const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth20`);
-
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      const newBids = data.bids.map(([price, amount], index) => ({
-        price: parseFloat(price),
-        amount: parseFloat(amount),
-        type: 'Bid',
-        timestamp: moment().subtract(index, 'seconds').format('YYYY-MM-DD HH:mm:ss'),
-      }));
-      const newAsks = data.asks.map(([price, amount], index) => ({
-        price: parseFloat(price),
-        amount: parseFloat(amount),
-        type: 'Ask',
-        timestamp: moment().subtract(index, 'seconds').format('YYYY-MM-DD HH:mm:ss'),
-      }));
-
-      setBids(newBids);
-      setAsks(newAsks);
-      setOrderBook([...newBids, ...newAsks]);
-
-      const totalBidVolume = newBids.reduce((acc, bid) => acc + bid.amount, 0);
-      const totalAskVolume = newAsks.reduce((acc, ask) => acc + ask.amount, 0);
-      const spread = newAsks[0].price - newBids[0].price;
-      const avgBidPrice = newBids.reduce((acc, bid) => acc + bid.price * bid.amount, 0) / totalBidVolume;
-      const avgAskPrice = newAsks.reduce((acc, ask) => acc + ask.price * ask.amount, 0) / totalAskVolume;
-      const liquidityRatio = totalBidVolume / totalAskVolume;
-
-      setLiquidity({ totalBidVolume, totalAskVolume, spread, avgBidPrice, avgAskPrice, liquidityRatio });
-    };
-
-    ws.onclose = () => {
-      console.log('WebSocket connection closed');
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, [symbol]);
-
-  const fetchHistoricalData = async () => {
+  const fetchHistoricalData = useCallback(async () => {
     try {
       const startTime = moment().subtract(1, 'days').startOf('day').unix() * 1000;
       const endTime = moment().subtract(1, 'days').endOf('day').unix() * 1000;
@@ -87,9 +42,9 @@ const OrderBook = () => {
       setError('Failed to fetch historical data. Please try again.');
       console.error(err);
     }
-  };
+  }, [symbol]);
 
-  const fetchFearGreedIndex = async () => {
+  const fetchFearGreedIndex = useCallback(async () => {
     try {
       const response = await axios.get('https://api.alternative.me/fng/?limit=1'); // Assuming this endpoint returns the fear and greed index
       const index = response.data.data[0].value;
@@ -97,7 +52,48 @@ const OrderBook = () => {
     } catch (err) {
       console.error('Failed to fetch Fear and Greed Index:', err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchHistoricalData();
+    fetchFearGreedIndex();
+    const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth20`);
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const newBids = data.bids.map(([price, amount], index) => ({
+        price: parseFloat(price),
+        amount: parseFloat(amount),
+        type: 'Bid',
+        timestamp: moment().subtract(index, 'seconds').format('YYYY-MM-DD HH:mm:ss'),
+      }));
+      const newAsks = data.asks.map(([price, amount], index) => ({
+        price: parseFloat(price),
+        amount: parseFloat(amount),
+        type: 'Ask',
+        timestamp: moment().subtract(index, 'seconds').format('YYYY-MM-DD HH:mm:ss'),
+      }));
+
+      setOrderBook([...newBids, ...newAsks]);
+
+      const totalBidVolume = newBids.reduce((acc, bid) => acc + bid.amount, 0);
+      const totalAskVolume = newAsks.reduce((acc, ask) => acc + ask.amount, 0);
+      const spread = newAsks[0].price - newBids[0].price;
+      const avgBidPrice = newBids.reduce((acc, bid) => acc + bid.price * bid.amount, 0) / totalBidVolume;
+      const avgAskPrice = newAsks.reduce((acc, ask) => acc + ask.price * ask.amount, 0) / totalAskVolume;
+      const liquidityRatio = totalBidVolume / totalAskVolume;
+
+      setLiquidity({ totalBidVolume, totalAskVolume, spread, avgBidPrice, avgAskPrice, liquidityRatio });
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket connection closed');
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [symbol, fetchHistoricalData, fetchFearGreedIndex]);
 
   const handleSymbolChange = (e) => {
     setSymbol(e.target.value);
@@ -165,7 +161,6 @@ const OrderBook = () => {
       .attr('transform-origin', `${width / 2} ${height / 1.2}`)
       .attr('transform', `rotate(${needleAngle(fearGreedIndex)})`);
   }, [fearGreedIndex]);
-  
 
   return (
     <div className="order-book">
@@ -174,10 +169,10 @@ const OrderBook = () => {
         Cryptocurrency Ticker:
         <input className="ticker" type="text" value={symbol} onChange={handleSymbolChange} />
       </label>
-      {/* <label>
+      <label>
         Time Interval (seconds):
         <input className="interval" type="number" value={interval} onChange={handleIntervalChange} />
-      </label> */}
+      </label>
       
       {error && <div className="error">{error}</div>}
       <div className="liquidity-info-and-fear-greed">
