@@ -2,6 +2,9 @@ import React from 'react';
 import './css/Analysis.css';
 
 const Analysis = ({ metrics }) => {
+    if (!metrics) {
+    return <div>No data to display. Please run a backtest first.</div>;
+  }
   return (
     <div className="analysis">
       <h2>Analysis</h2>
