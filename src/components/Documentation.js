@@ -5,10 +5,10 @@ const Documentation = () => {
   return (
     <div className="documentation">
       <h2>Documentation</h2>
+      
       <section>
         <h3>Database Schema</h3>
-        <br></br>
-        <p>Only the parameters stated below are able to be retrieved and edited in the trading strategy under <b>"Backtest"</b> tab. </p>
+        <p>The parameters listed below can be retrieved and edited in the trading strategy under the <b>"Backtest"</b> tab:</p>
         <div className="database-schema">
           <table>
             <thead>
@@ -50,17 +50,12 @@ const Documentation = () => {
           </table>
         </div>
       </section>
-      <br></br>
+      
+      
       <section>
         <h3>Creating Strategies</h3>
-        <br></br>
-        <p>
-          To create a strategy, you need to define a function named <code>strategy</code> that takes a DataFrame as input and returns a DataFrame with buy/sell signals.
-        </p>
-        <br></br>
-        <p>
-          Below is a sample strategy for the Double Moving Crossover Average strategy:
-        </p>
+        <p>To create a strategy, define a function named <code>strategy</code> that takes a DataFrame as input and returns a DataFrame with buy/sell signals.</p>
+        <p>Below is an example of a Double Moving Average Crossover strategy:</p>
         <pre>
           <code>
 {`
@@ -80,15 +75,8 @@ def strategy(data):
 
       <section>
         <h3>Uploading Custom AI Trained Model</h3>
-        <br></br>
-        <p>
-          Users will need to write their training model in python and save as <b>".py"</b> file.
-          Additionally, you need to generate a <b>".pkl"</b> file from the training model.
-        </p>
-        <br></br>
-        <p>
-          Below is an example of how to train a machine learning model using historical data and generate the pkl file:
-        </p>
+        <p>To upload a custom AI trained model, write the training model in Python and save it as a <b>".py"</b> file. Additionally, generate a <b>".pkl"</b> file from the training model.</p>
+        <p>Below is an example of how to train a machine learning model using historical data and generate the pkl file:</p>
         <pre>
           <code>
 {`
@@ -124,19 +112,12 @@ print('Model training complete and saved')
 `}
           </code>
         </pre>
-
-        <p>
-          ** Note that joblib.dump helps to generate the testing_modelFile.pkl. There is no naming convention required for the pkl file.
-        </p>
-        <br></br>
+        <p>** Note: <code>joblib.dump</code> generates the <code>testing_modelFile.pkl</code>. There is no specific naming convention required for the pkl file.</p>
       </section>
 
       <section>
         <h3>Real-Time Order Book</h3>
-        <br></br>
-        <p>
-          The real-time order book allows you to view the current market depth for a given cryptocurrency ticker. It includes the following features:
-        </p>
+        <p>The real-time order book allows you to view the current market depth for a given cryptocurrency ticker. It includes the following features:</p>
         <ul>
           <li>Real-time bids and asks with their respective prices and volumes.</li>
           <li>Liquidity information including total bid volume, total ask volume, spread, average bid price, average ask price, and liquidity ratio.</li>
@@ -144,17 +125,26 @@ print('Model training complete and saved')
         </ul>
         <h4>Insights</h4>
         <ul>
-          <li>Total Bid Volume: Sum of all bid volumes.</li>
-          <li>Total Ask Volume: Sum of all ask volumes.</li>
-          <li>Spread: Difference between the highest bid price and the lowest ask price.</li>
-          <li>Average Bid Price: Weighted average price of all bids.</li>
-          <li>Average Ask Price: Weighted average price of all asks.</li>
-          <li>Liquidity Ratio: Ratio of total bid volume to total ask volume.</li>
+          <li><b>Total Bid Volume:</b> Sum of all bid volumes.</li>
+          <li><b>Total Ask Volume:</b> Sum of all ask volumes.</li>
+          <li><b>Spread:</b> Difference between the highest bid price and the lowest ask price.</li>
+          <li><b>Average Bid Price:</b> Weighted average price of all bids.</li>
+          <li><b>Average Ask Price:</b> Weighted average price of all asks.</li>
+          <li><b>Liquidity Ratio:</b> Ratio of total bid volume to total ask volume.</li>
         </ul>
       </section>
 
-     
-
+      <section>
+        <h3>Analysis</h3>
+        <p>Run a backtest to generate additional metrics. The metrics available are:</p>
+        <ul>
+          <li><b>Cumulative Returns:</b> The total return on an investment over a set period of time.</li>
+          <li><b>Annualized Volatility:</b> A measure of the dispersion of returns for a given security or market index, typically expressed as a percentage.</li>
+          <li><b>Sharpe Ratio:</b> A measure of risk-adjusted return, calculated by dividing the portfolio's excess return by its standard deviation.</li>
+          <li><b>Max Drawdown:</b> The maximum observed loss from a peak to a trough of a portfolio, before a new peak is attained.</li>
+          <li><b>Sortino Ratio:</b> A variation of the Sharpe ratio that differentiates harmful volatility from total overall volatility by using the asset's standard deviation of negative asset returns.</li>
+        </ul>
+      </section>
     </div>
   );
 };

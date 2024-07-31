@@ -3,6 +3,7 @@
     width: 80%;
     margin: 0 auto;
     color: white;
+    font-size: 20px;
   }
   
   .metrics {
@@ -18,9 +19,27 @@
     list-style-type: none;
     padding: 0;
   }
+
+
   
-  .metrics li {
-    margin: 5px 0;
-    font-size: 16px;
+  .metric-descriptions {
+    font-size: 20px;
+    margin-top: 20px;
+  }
+  
+  .metric-descriptions h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .metric-descriptions ul {
+    font-size: 20px;
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .metric-descriptions li {
+    font-size: 20px;
+    margin-bottom: 10px;
   }
   
