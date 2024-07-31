@@ -57,11 +57,15 @@ Ensure you have the following installed on your local development machine:
 
 7. **Start the application**
 
-    From the terminal, in the project directory, you can run the below to start the application:   
+   a. From the terminal, in the project directory, you can run the below to start the application:   
     ```sh
     npm start
+      ```
+   b. Alternatively, you may go to https://junhao247.github.io/Backtesting-Platform/ to utilise the production build application.
+
 
 By following the above steps, the application should be running locally.
+
 
 
 ## Troubleshooting
