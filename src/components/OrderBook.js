@@ -14,13 +14,28 @@ const OrderBook = () => {
   const [historicalData, setHistoricalData] = useState([]);
   const [fearGreedIndex, setFearGreedIndex] = useState(50); // Default value for Fear and Greed Index
   const [error, setError] = useState(null);
+  const [ws, setWs] = useState(null);
 
   useEffect(() => {
     fetchHistoricalData();
     fetchFearGreedIndex();
-    const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth20`);
+    setupWebSocket(symbol);
 
-    ws.onmessage = (event) => {
+    return () => {
+      if (ws) {
+        ws.close();
+      }
+    };
+  }, [symbol, interval]);
+
+  const setupWebSocket = (symbol) => {
+    if (ws) {
+      ws.close();
+    }
+
+    const newWs = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth20`);
+
+    newWs.onmessage = (event) => {
       const data = JSON.parse(event.data);
       const newBids = data.bids.map(([price, amount], index) => ({
         price: parseFloat(price),
@@ -49,14 +64,12 @@ const OrderBook = () => {
       setLiquidity({ totalBidVolume, totalAskVolume, spread, avgBidPrice, avgAskPrice, liquidityRatio });
     };
 
-    ws.onclose = () => {
+    newWs.onclose = () => {
       console.log('WebSocket connection closed');
     };
 
-    return () => {
-      ws.close();
-    };
-  }, [symbol]);
+    setWs(newWs);
+  };
 
   const fetchHistoricalData = async () => {
     try {
@@ -165,7 +178,6 @@ const OrderBook = () => {
       .attr('transform-origin', `${width / 2} ${height / 1.2}`)
       .attr('transform', `rotate(${needleAngle(fearGreedIndex)})`);
   }, [fearGreedIndex]);
-  
 
   return (
     <div className="order-book">
@@ -174,10 +186,12 @@ const OrderBook = () => {
         Cryptocurrency Ticker:
         <input className="ticker" type="text" value={symbol} onChange={handleSymbolChange} />
       </label>
-      <label>
+      
+      {/* <label>
         Time Interval (seconds):
         <input className="interval" type="number" value={interval} onChange={handleIntervalChange} />
-      </label>
+      </label> */}
+      
       
       {error && <div className="error">{error}</div>}
       <div className="liquidity-info-and-fear-greed">
