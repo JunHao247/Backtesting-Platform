@@ -28,6 +28,16 @@ Ensure you have the following installed on your local development machine:
 
 3. **Install Dependencies**
    ```sh
+   1. Preferably, create a virtual environment:
+   python -m venv (name of virtual environment)
+   
+   2. Activate the virtual env
+   On Unix Systems:
+   source venv/bin/activate
+   On Windows:
+   venv\Scripts\activate
+   
+   3. Install necessary dependencies
    npm install
    pip install pandas
    pip install joblib
