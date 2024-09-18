@@ -38,7 +38,7 @@ def strategy(data, window=20):
   `,
   'Custom Strategy': '', 
   'AI-Based Strategy': 'ai',
-  'Custom AI Strategy': 'custom_ai',
+  'Custom AI Strategy': 'Please write your strategy here and upload your respective training model files',
 };
 
 const BacktestForm = ({ onResults }) => {
