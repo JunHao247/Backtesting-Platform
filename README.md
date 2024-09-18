@@ -38,9 +38,7 @@ Ensure you have the following installed on your local development machine:
    venv\Scripts\activate
    
    3. Install necessary dependencies
-   npm install
-   pip install pandas
-   pip install joblib
+   pip install -r requirements.txt
 
 
 4. **Start the static server**
