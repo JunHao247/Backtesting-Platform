@@ -62,6 +62,16 @@ def apply_ai_strategy(data, symbol):
     data.loc[:, 'positions'] = data['signal'].diff()
     return data
 
+def apply_custom_ai_strategy(data, model_file, strategy_code):
+    if not os.path.exists(model_file):
+        raise ValueError(f"Model file {model_file} does not exist")
+
+    custom_model = joblib.load(model_file)
+
+    env = {'pd': pd, 'np': np, 'model': custom_model}
+    exec(strategy_code, env)
+    strategy = env['strategy']
+    return strategy(data)
 
 def calculate_metrics(data):
     metrics = {}
