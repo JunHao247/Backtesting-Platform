@@ -28,34 +28,28 @@ Ensure you have the following installed on your local development machine:
 
 3. **Install Dependencies**
    ```sh
-   npm install
-
-4. **Retrieve Binance API Key and Secret**
-
-    To interact with the Binance API, you need an API key and secret. Follow these steps to retrieve them:
-
-        a. Sign Up or Log In: Go to Binance and sign up for an account or log in to your existing account.
-        b. API Management: Navigate to the API Management section in your account settings.
-        c. Create API Key: Create a new API key. You will be prompted to provide a label for your API key and to complete security verifications.
-        d. Save Your API Key and Secret: Once the API key is created, you will see your API key and secret. Make sure to save them securely as the secret will be shown only once.
-
-5. **Environment Variables**
+   1. Preferably, create a virtual environment:
+   python -m venv venv
    
-    Create an `.env` file in the project directory,
+   2. Activate the virtual env
+   On Unix Systems:
+   source venv/bin/activate
+   On Windows:
+   venv\Scripts\activate
+   
+   3. Install necessary dependencies
+   npm install
+   pip install pandas
+   pip install joblib
 
-    Input 2 parameters:
-    ```sh
-    BINANCE_API_KEY = (Your own BINANCE API KEY)
 
-    BINANCE_API_SECRET = (Your own BINANCE API SECRET)
-
-6. **Start the static server**
+4. **Start the static server**
 
     From the terminal, in the project directory, you can run the below to start the server:   
     ```sh
     node server.js
 
-7. **Start the application**
+5. **Start the application**
 
    a. From the terminal, in the project directory, you can run the below to start the application:   
     ```sh
